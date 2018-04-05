@@ -24,6 +24,7 @@
     "react-native": "^0.21"
   },
   "dependencies": {
+    "create-react-class": "^15.6.3",
     "prop-types": "^15.6.1"
   }
 }

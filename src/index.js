@@ -11,6 +11,7 @@
 var React = require('react');
 var PropTypes = require('prop-types');
 var ReactNative = require('react-native');
+var createReactClass = require('create-react-class');
 var { Animated, Touchable } = ReactNative;
 
 var EdgeInsetsPropType = PropTypes.shape({
@@ -36,7 +37,7 @@ var PRESS_RETENTION_OFFSET = { top: 20, left: 20, right: 20, bottom: 30 };
  * `TouchableMixin` expects us to implement some abstract methods to handle
  * interesting interactions such as `handleTouchablePress`.
  */
-var TouchableBounce = React.createClass({
+var TouchableBounce = createReactClass({
   mixins: [Touchable.Mixin],
 
   propTypes: {
