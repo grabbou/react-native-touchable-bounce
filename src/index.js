@@ -9,14 +9,16 @@
 'use strict';
 
 var React = require('react');
+var PropTypes = require('prop-types');
 var ReactNative = require('react-native');
+var createReactClass = require('create-react-class');
 var { Animated, Touchable } = ReactNative;
 
-var EdgeInsetsPropType = React.PropTypes.shape({
-  top: React.PropTypes.number,
-  left: React.PropTypes.number,
-  bottom: React.PropTypes.number,
-  right: React.PropTypes.number
+var EdgeInsetsPropType = PropTypes.shape({
+  top: PropTypes.number,
+  left: PropTypes.number,
+  bottom: PropTypes.number,
+  right: PropTypes.number
 });
 
 type Event = Object;
@@ -26,7 +28,7 @@ type State = {
   scale: Animated.Value;
 };
 
-var PRESS_RETENTION_OFFSET = {top: 20, left: 20, right: 20, bottom: 30};
+var PRESS_RETENTION_OFFSET = { top: 20, left: 20, right: 20, bottom: 30 };
 
 /*
  * Example of using the `TouchableMixin` to play well with other responder
@@ -35,19 +37,19 @@ var PRESS_RETENTION_OFFSET = {top: 20, left: 20, right: 20, bottom: 30};
  * `TouchableMixin` expects us to implement some abstract methods to handle
  * interesting interactions such as `handleTouchablePress`.
  */
-var TouchableBounce = React.createClass({
+var TouchableBounce = createReactClass({
   mixins: [Touchable.Mixin],
 
   propTypes: {
-    onPress: React.PropTypes.func,
-    onPressIn: React.PropTypes.func,
-    onPressOut: React.PropTypes.func,
+    onPress: PropTypes.func,
+    onPressIn: PropTypes.func,
+    onPressOut: PropTypes.func,
     // The function passed takes a callback to start the animation which should
     // be run after this onPress handler is done. You can use this (for example)
     // to update UI before starting the animation.
-    onPressWithCompletion: React.PropTypes.func,
+    onPressWithCompletion: PropTypes.func,
     // the function passed is called after the animation is complete
-    onPressAnimationComplete: React.PropTypes.func,
+    onPressAnimationComplete: PropTypes.func,
     /**
      * When the scroll view is disabled, this defines how far your touch may
      * move off of the button, before deactivating the button. Once deactivated,
@@ -67,14 +69,14 @@ var TouchableBounce = React.createClass({
     hitSlop: EdgeInsetsPropType,
   },
 
-  getInitialState: function(): State {
+  getInitialState: function (): State {
     return {
       ...this.touchableGetInitialState(),
       scale: new Animated.Value(1),
     };
   },
 
-  bounceTo: function(
+  bounceTo: function (
     value: number,
     velocity: number,
     bounciness: number,
@@ -91,17 +93,17 @@ var TouchableBounce = React.createClass({
    * `Touchable.Mixin` self callbacks. The mixin will invoke these if they are
    * defined on your component.
    */
-  touchableHandleActivePressIn: function(e: Event) {
+  touchableHandleActivePressIn: function (e: Event) {
     this.bounceTo(0.93, 0.1, 0);
     this.props.onPressIn && this.props.onPressIn(e);
   },
 
-  touchableHandleActivePressOut: function(e: Event) {
+  touchableHandleActivePressOut: function (e: Event) {
     this.bounceTo(1, 0.4, 0);
     this.props.onPressOut && this.props.onPressOut(e);
   },
 
-  touchableHandlePress: function(e: Event) {
+  touchableHandlePress: function (e: Event) {
     var onPressWithCompletion = this.props.onPressWithCompletion;
     if (onPressWithCompletion) {
       onPressWithCompletion(() => {
@@ -115,22 +117,22 @@ var TouchableBounce = React.createClass({
     this.props.onPress && this.props.onPress(e);
   },
 
-  touchableGetPressRectOffset: function(): typeof PRESS_RETENTION_OFFSET {
+  touchableGetPressRectOffset: function (): typeof PRESS_RETENTION_OFFSET {
     return this.props.pressRetentionOffset || PRESS_RETENTION_OFFSET;
   },
 
-  touchableGetHitSlop: function(): ?Object {
+  touchableGetHitSlop: function (): ?Object {
     return this.props.hitSlop;
   },
 
-  touchableGetHighlightDelayMS: function(): number {
+  touchableGetHighlightDelayMS: function (): number {
     return 0;
   },
 
-  render: function(): ReactElement {
+  render: function (): ReactElement {
     return (
       <Animated.View
-        style={[{transform: [{scale: this.state.scale}]}, this.props.style]}
+        style={[{ transform: [{ scale: this.state.scale }] }, this.props.style]}
         accessible={true}
         accessibilityLabel={this.props.accessibilityLabel}
         accessibilityComponentType={this.props.accessibilityComponentType}
